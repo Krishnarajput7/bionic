@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bionic Arm Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* Full-Screen Background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('background-image.jpg'); /* Add your background image */
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            animation: backgroundScroll 10s infinite linear;
+        }
+
+        @keyframes backgroundScroll {
+            0% { background-position: center; }
+            100% { background-position: 100% 100%; }
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeOut 1s ease-out forwards;
+            animation-delay: 1s;
+        }
+
+        .loading-screen .logo {
+            font-size: 50px;
+            font-weight: 600;
+            color: #00ccff;
+            letter-spacing: 5px;
+            animation: logoAnimation 0.5s ease-in-out infinite;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; visibility: visible; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        /* Navigation Bar */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        nav:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 25px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #00ccff;
+            transform: scale(1.1);
+        }
+
+        /* Main Section */
+        h1 {
+            text-align: center;
+            margin: 60px 0;
+            font-size: 48px;
+            color: #00ccff;
+            font-weight: 600;
+            letter-spacing: 2px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* Image and Notes Container */
+        .image-notes-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-notes-container img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .image-notes-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .image-notes-container:hover img {
+            transform: scale(1.1);
+        }
+
+        .notes {
+            font-size: 16px;
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        /* Description */
+        .description {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .description:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 255, 255, 0.5);
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #ccc;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Scroll Down Arrow */
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30px;
+            color: #fff;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(15px);
+            }
+        }
+
+        /* Rope and Ball */
+        .rope {
+            position: fixed;
+            top: 0;
+            right: 50px;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, white 0%, white 0%);
+            z-index: 1500;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+            transition: background 0.3s ease;
+        }
+
+        .ball {
+            position: absolute;
+            top: 0;
+            right: -12px;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, #ff00cc, #00ccff);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.8);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .image-notes-container {
+                text-align: center;
+            }
+
+            .image-notes-container img {
+                width: 80%;
+                height: auto;
+            }
+
+            .description {
+                width: 90%;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="logo">Bionic Arm</div>
+    </div>
+
+    <!-- Full-Screen Background -->
+    <div class="background"></div>
+
+    <!-- Rope and Ball -->
+    <div class="rope">
+        <div class="ball"></div>
+    </div>
+
+    <!-- Scroll Down Arrow -->
+    <div class="scroll-down" onclick="scrollToSection('about')">&#8595;</div>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#more">More</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Heading -->
+    <h1 id="home">Bionic Arm Project</h1>
+
+    <!-- Content Section -->
+    <div class="container">
+        <!-- Image 1 with Notes -->
+        <div class="image-notes-container">
+            <img src="c:\Users\HP\Documents\img1.jpg" alt="Bionic Arm Image 1">
+            <div class="notes">
+                This image shows the prototype design of the bionic arm. The arm is designed to have a highly flexible structure, with precision joints that can move smoothly in all directions. The arm is equipped with sensors that allow it to detect and react to external stimuli.
+            </div>
+        </div>
+
+        <!-- Image 2 with Notes -->
+        <div class="image-notes-container">
+            <img src="c:\Users\HP\Documents\img2.jpg" alt="Bionic Arm Image 2">
+            <div class="notes">
+                The bionic arm in action. Here, we can see the arm performing a basic function like gripping an object. The arm's responsiveness is powered by advanced algorithms and motorized actuators that simulate human muscle movements.
+            </div>
+        </div>
+
+        <!-- Image 3 with Notes -->
+        <div class="image-notes-container">
+            <img src="c:\Users\HP\Documents\img3.jpg" alt="Bionic Arm Image 3">
+            <div class="notes">
+                A close-up of the bionic arm's mechanical structure. This image showcases the internal components such as the microprocessor, sensors, and wiring. The components are carefully arranged to ensure that the arm operates efficiently and with high precision.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scroll to section
+        function scrollToSection(id) {
+            const section = document.getElementById(id);
+            window.scrollTo({
+                top: section.offsetTop,
+                behavior: 'smooth'
+            });
+        }
+
+
+        // Rope and ball scroll effect
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            const rope = document.querySelector('.rope');
+            const ball = document.querySelector('.ball');
+
+            // Calculate the position of the ball along the rope
+            const ropeHeight = rope.offsetHeight;
+            const ballPosition = (scrollTop / maxScroll) * ropeHeight;
+
+            // Move the ball along the rope
+            ball.style.transform = `translateY(${ballPosition}px)`; // Use pixel values for accurate movement
+
+            // Fill the rope with glowing blue as the ball moves down
+            const colorRatio = scrollTop / maxScroll;
+
+            // Update the rope's gradient
+            rope.style.background = `linear-gradient(to bottom, white ${colorRatio * 100}%, rgba(0, 204, 255, 0.7) ${colorRatio * 100}%)`;
+
+            // Update the ball's color as it moves down
+            ball.style.backgroundColor = `rgb(0, ${Math.round(204 * colorRatio)}, ${255 - Math.round(255 * colorRatio)})`;
+        });
+    </script>
+</body>
+</html>
